@@ -3,8 +3,10 @@
 
 #include <mysql.h>
 #include <iostream>
+#include <vector>
 #include "../Hotel/Hotel.h"
 #include "../Administrador/Administrador.h"
+#include "../Cliente/Cliente.h"
 
 using namespace std;
 class Conexion {
@@ -25,5 +27,25 @@ class Conexion {
         void addReciboHospedaje(Administrador admin);
         void registrosPendientes();
         void estadoHabitacion();
+
+    std::vector<Administrador> getAdministradores();
+
+    void insertarNuevoAdministrador(Administrador administrador);
+
+    Administrador buscarPorNombre(string s);
+
+    void actualizarAdministrador(Administrador administrador);
+
+    void eliminarAdministrador(int i);
+
+    void insertarNuevoCliente(Cliente cliente);
+
+    Cliente buscarClientePorNombre(string nombre);
+
+    void actualizarCliente(Cliente cliente);
+
+    void eliminarCliente(int i);
+
+    std::vector<Cliente> getClientes();
 };
 #endif //PS_CONEXION_H

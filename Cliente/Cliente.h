@@ -14,7 +14,12 @@ struct Cliente {
     int id_hotel;
     string nombre;
     string apellidos;
+    int estado;
     string telefono;
+    string toString() {
+        return "Nombre:" + nombre +
+               " " + apellidos + ", telefono: " + telefono + "\n";
+    }
 };
 
 #endif //PS_CLIENTE_H
