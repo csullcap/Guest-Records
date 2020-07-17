@@ -310,7 +310,6 @@ void Conexion::eliminarCliente(int i) {
 std::vector<Cliente> Conexion::getClientes() {
     string query = "SELECT * FROM cliente";
     query_state = mysql_query(connection, query.c_str());
-
     vector<Cliente> clientes;
     if (!query_state) {
         result = mysql_store_result(connection);
@@ -337,6 +336,24 @@ std::vector<Cliente> Conexion::getClientes() {
         }
     }
     return clientes;
+}
+
+void Conexion::verTodosRegistros() {
+    string query = "SELECT * FROM recibohospedaje";
+    query_state = mysql_query(connection, query.c_str());
+    if (!query_state) {
+        result = mysql_store_result(connection);
+        if (result->row_count == 0) {
+            cout << "vacio" << endl;
+        } else {
+            while (row = mysql_fetch_row(result)) {
+                cout << "id:" << row[0] << " Habitacion: " << row[1] << " Fecha Inscripcion: " << row[6] << endl;
+            }
+        }
+    } else {
+        cout << "Ocurrio un problema" << endl;
+
+    }
 }
 
 

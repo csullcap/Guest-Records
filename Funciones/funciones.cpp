@@ -1,11 +1,8 @@
 #include <iostream>
 #include <windows.h>
-
 #include <conio.h>
-
 #define ENTER 13
 #define BACKSPACE 8
-
 #include "../Administrador/Administrador.h"
 #include "../Conexion/Conexion.h"
 #include "../Habitacion/Habitacion.h"
@@ -14,17 +11,11 @@
 using namespace std;
 
 bool iniciarSesion(Administrador &admin, Conexion bd_conexion);
-
 void menu_principal(Administrador &admin, Conexion bd_conexion);
-
 void servicioDeHotel(Administrador &admin, Conexion bd_conexion);
-
 void gotoxy(int x, int y);
-
 void imprimir_rectangle(char a);
-
 void mostrarMenuAdministrador(Administrador &administrador, Conexion bd);
-
 void mostrarMenuClientes(Administrador &administrador, Conexion bd);
 
 inline bool iniciarSesion(Administrador &admin, Conexion bd_conexion) {
@@ -116,14 +107,12 @@ inline void menu_principal(Administrador &admin, Conexion bd_conexion) {
             case '4':
                 system("cls");
                 cout << "ADMINISTRADORES" << endl;
-                system("pause");
                 mostrarMenuAdministrador(admin, bd_conexion);
                 break;
 
             case '5':
                 system("cls");
                 cout << "CLIENTES" << endl;
-                system("pause");
                 mostrarMenuClientes(admin, bd_conexion);
                 break;
 
@@ -168,6 +157,7 @@ inline void servicioDeHotel(Administrador &admin, Conexion bd_conexion) {
 
             case '2':
                 system("cls");
+                cout<<"Registro Pendientes"<<endl;
                 bd_conexion.registrosPendientes();
                 system("pause");
                 break;
@@ -181,12 +171,13 @@ inline void servicioDeHotel(Administrador &admin, Conexion bd_conexion) {
 
             case '4':
                 system("cls");
-                cout << "Registros pendientes" << endl;
+                cout << "Ver todos los registros : " << endl;
+                bd_conexion.verTodosRegistros();
                 system("pause");
                 break;
 
             case '5':
-                cout << "Ver todos los registros" << endl;
+                cout << "Salio del menu" << endl;
                 system("pause");
                 system("cls");
                 break;
@@ -245,22 +236,23 @@ inline void mostrarMenuAdministrador(Administrador &administrador, Conexion bd) 
         system("cls");
 
         if (opcion == 1) {
+            cin.ignore(256, '\n');
             auto adminNuevo = Administrador();
             cout << "Nombre" << endl;
-            cin >> adminNuevo.nombre;
+            getline(cin,adminNuevo.nombre);
             cout << "Apellidos" << endl;
-            cin >> adminNuevo.apellidos;
+            getline(cin,adminNuevo.apellidos);
             cout << "Username" << endl;
-            cin >> adminNuevo.username;
+            getline(cin,adminNuevo.username);
             cout << "Password" << endl;
-            cin >> adminNuevo.contra;
+            getline(cin,adminNuevo.contra);
             cout << "Telefono" << endl;
-            cin >> adminNuevo.telefono;
+            getline(cin,adminNuevo.telefono);
             bd.insertarNuevoAdministrador(adminNuevo);
         } else if (opcion == 2) {
             cout << "Ingrese nombre a buscar:\n" << endl;
             string n;
-            cin >> n;
+            getline( cin,n);
             auto adminModificar = bd.buscarPorNombre(n);
             if (adminModificar.id_administrador != 0) {
                 cout << "Dato a modificar: " << endl;
@@ -275,22 +267,22 @@ inline void mostrarMenuAdministrador(Administrador &administrador, Conexion bd) 
                 if (tipoModificacion == 1) {
                     cout << "Nombre actual:" + adminModificar.nombre << endl;
                     cout << "Ingrese nuevo nombre:" << endl;
-                    cin >> adminModificar.nombre;
+                    getline(cin,adminModificar.nombre);
                     bd.actualizarAdministrador(adminModificar);
                 } else if (tipoModificacion == 2) {
-                    cout << "Nombre actual:" + adminModificar.nombre << endl;
+                    cout << "Apellido actual:" + adminModificar.apellidos << endl;
                     cout << "Ingrese nuevo Apellido:" << endl;
-                    cin >> adminModificar.apellidos;
+                    getline(cin,adminModificar.apellidos);
                     bd.actualizarAdministrador(adminModificar);
                 } else if (tipoModificacion == 3) {
-                    cout << "Nombre actual:" + adminModificar.nombre << endl;
+                    cout << "Username actual:" + adminModificar.username << endl;
                     cout << "Ingrese nuevo Username:" << endl;
-                    cin >> adminModificar.username;
+                    getline(cin , adminModificar.username);
                     bd.actualizarAdministrador(adminModificar);
                 } else if (tipoModificacion == 4) {
-                    cout << "Nombre actual:" + adminModificar.nombre << endl;
+                    cout << "Telefono actual:" + adminModificar.telefono << endl;
                     cout << "Ingrese nuevo Telefono:" << endl;
-                    cin >> adminModificar.telefono;
+                    getline(cin, adminModificar.telefono);
                     bd.actualizarAdministrador(adminModificar);
                 }
             } else {
@@ -301,10 +293,10 @@ inline void mostrarMenuAdministrador(Administrador &administrador, Conexion bd) 
         } else if (opcion == 3) {
             cout << "Ingrese nombre a buscar:\n" << endl;
             string n;
-            cin >> n;
+            getline(cin , n);
             auto adminModificar = bd.buscarPorNombre(n);
             if (adminModificar.id_administrador != 0) {
-                cout << "Eliminar administrador: " + adminModificar.toString() + "\n (1) Si \n(2) No " << endl;
+                cout << "Eliminar administrador: \n" + adminModificar.toString() + "\n (1) Si \n(2) No " << endl;
                 int eliminar;
                 cin >> eliminar;
                 if (eliminar == 1) {
@@ -313,8 +305,6 @@ inline void mostrarMenuAdministrador(Administrador &administrador, Conexion bd) 
             } else {
                 cout << "Usuario no encontrado." << endl;
             }
-
-
         } else if (opcion == 4) {
             cout << "\n Lista de Administradores\n" << endl;
             auto admins = bd.getAdministradores();
@@ -325,7 +315,6 @@ inline void mostrarMenuAdministrador(Administrador &administrador, Conexion bd) 
             system("pause");
         }
     } while (opcion != 5);
-    menu_principal(administrador, bd);
 }
 
 inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
@@ -343,11 +332,13 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
         system("cls");
 
         if (opcion == 1) {
+            cin.ignore(256, '\n');
             auto clienteNuevo = Cliente();
             cout << "Nombre" << endl;
-            cin >> clienteNuevo.nombre;
+            getline(cin , clienteNuevo.nombre);
             cout << "Apellidos" << endl;
             getline(cin, clienteNuevo.apellidos);
+            cout << "Telefono" << endl;
             getline(cin, clienteNuevo.telefono);
             bd.insertarNuevoCliente(clienteNuevo);
             system("pause");
@@ -355,7 +346,7 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
         else if (opcion == 2) {
             cout << "Ingrese nombre a buscar:\n" << endl;
             string n;
-            cin >> n;
+            getline(cin, n);
             auto clienteModificar = bd.buscarClientePorNombre(n);
             if (clienteModificar.id_cliente != 0) {
                 cout << "Dato a modificar: " << endl;
@@ -367,19 +358,19 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
                 int tipoModificacion;
                 cin >> tipoModificacion;
                 if (tipoModificacion == 1) {
-                    cout << "Nombre actual:" + clienteModificar.nombre << endl;
+                    cout << "Nombre actual : " + clienteModificar.nombre << endl;
                     cout << "Ingrese nuevo nombre:" << endl;
-                    cin >> clienteModificar.nombre;
+                    getline(cin, clienteModificar.nombre);
                     bd.actualizarCliente(clienteModificar);
                 } else if (tipoModificacion == 2) {
-                    cout << "Nombre actual:" + clienteModificar.nombre << endl;
+                    cout << "Apellido actual : " + clienteModificar.apellidos << endl;
                     cout << "Ingrese nuevo Apellido:" << endl;
-                    cin >> clienteModificar.apellidos;
+                    getline(cin, clienteModificar.apellidos);
                     bd.actualizarCliente(clienteModificar);
                 } else if (tipoModificacion == 3) {
-                    cout << "Nombre actual:" + clienteModificar.nombre << endl;
-                    cout << "Ingrese nuevo Telefono:" << endl;
-                    cin >> clienteModificar.telefono;
+                    cout << "Telefono actual : " + clienteModificar.telefono << endl;
+                    cout << "Ingrese nuevo Telefono :" << endl;
+                    getline(cin, clienteModificar.telefono);
                     bd.actualizarCliente(clienteModificar);
                 }
             } else {
@@ -390,7 +381,7 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
         } else if (opcion == 3) {
             cout << "Ingrese nombre a buscar:\n" << endl;
             string n;
-            cin >> n;
+            getline(cin ,n);
             auto clienteModificar = bd.buscarClientePorNombre(n);
             if (clienteModificar.id_cliente != 0) {
                 cout << "Eliminar cliente: " + clienteModificar.toString() + "\n (1) Si \n(2) No " << endl;
@@ -402,8 +393,6 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
             } else {
                 cout << "Usuario no encontrado." << endl;
             }
-
-
         } else if (opcion == 4) {
             cout << "\n Lista de Clientes\n" << endl;
             auto clientes = bd.getClientes();
@@ -414,5 +403,4 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
             system("pause");
         }
     } while (opcion != 5);
-    menu_principal(administrador, bd);
 }

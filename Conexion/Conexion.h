@@ -27,25 +27,16 @@ class Conexion {
         void addReciboHospedaje(Administrador admin);
         void registrosPendientes();
         void estadoHabitacion();
-
-    std::vector<Administrador> getAdministradores();
-
-    void insertarNuevoAdministrador(Administrador administrador);
-
-    Administrador buscarPorNombre(string s);
-
-    void actualizarAdministrador(Administrador administrador);
-
-    void eliminarAdministrador(int i);
-
-    void insertarNuevoCliente(Cliente cliente);
-
-    Cliente buscarClientePorNombre(string nombre);
-
-    void actualizarCliente(Cliente cliente);
-
-    void eliminarCliente(int i);
-
-    std::vector<Cliente> getClientes();
+        std::vector<Administrador> getAdministradores();
+        void insertarNuevoAdministrador(Administrador administrador);
+        Administrador buscarPorNombre(string s);
+        void actualizarAdministrador(Administrador administrador);
+        void eliminarAdministrador(int i);
+        void insertarNuevoCliente(Cliente cliente);
+        Cliente buscarClientePorNombre(string nombre);
+        void actualizarCliente(Cliente cliente);
+        void eliminarCliente(int i);
+        std::vector<Cliente> getClientes();
+        void verTodosRegistros();
 };
 #endif //PS_CONEXION_H
