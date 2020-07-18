@@ -77,11 +77,10 @@ inline void menu_principal(Administrador &admin, Conexion bd_conexion) {
         cout << "Menu Principal" << endl;
         cout << "(1) Reservaciones" << endl;
         cout << "(2) Servicio de Hotel" << endl;
-        cout << "(3) Turnos" << endl;
-        cout << "(4) Administradores" << endl;
-        cout << "(5) Clientes" << endl;
-        cout << "(6) Servicios" << endl;
-        cout << "(7) Salir" << endl;
+        cout << "(3) Administradores" << endl;
+        cout << "(4) Clientes" << endl;
+        cout << "(5) Servicios" << endl;
+        cout << "(6) Salir" << endl;
         cout << "Opcion : ";
         cin >> op_menu_principal;
         switch (op_menu_principal) {
@@ -100,29 +99,23 @@ inline void menu_principal(Administrador &admin, Conexion bd_conexion) {
 
             case '3':
                 system("cls");
-                cout << "TURNOS" << endl;
-                system("pause");
-                break;
-
-            case '4':
-                system("cls");
                 cout << "ADMINISTRADORES" << endl;
                 mostrarMenuAdministrador(admin, bd_conexion);
                 break;
 
-            case '5':
+            case '4':
                 system("cls");
                 cout << "CLIENTES" << endl;
                 mostrarMenuClientes(admin, bd_conexion);
                 break;
 
-            case '6':
+            case '5':
                 system("cls");
                 cout << "SERVICIOS" << endl;
                 system("pause");
                 break;
 
-            case '7':
+            case '6':
                 cout << "Salio del menu principal" << endl;
                 system("pause");
                 system("cls");
@@ -135,7 +128,7 @@ inline void menu_principal(Administrador &admin, Conexion bd_conexion) {
                 break;
         }
 
-    } while (op_menu_principal != '7');
+    } while (op_menu_principal != '6');
 }
 
 inline void servicioDeHotel(Administrador &admin, Conexion bd_conexion) {
@@ -250,6 +243,7 @@ inline void mostrarMenuAdministrador(Administrador &administrador, Conexion bd) 
             getline(cin,adminNuevo.telefono);
             bd.insertarNuevoAdministrador(adminNuevo);
         } else if (opcion == 2) {
+            cin.ignore(256,'\n');
             cout << "Ingrese nombre a buscar:\n" << endl;
             string n;
             getline( cin,n);
@@ -330,7 +324,6 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
         cout << "Opcion : ";
         cin >> opcion;
         system("cls");
-
         if (opcion == 1) {
             cin.ignore(256, '\n');
             auto clienteNuevo = Cliente();
@@ -344,8 +337,9 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
             system("pause");
         }
         else if (opcion == 2) {
-            cout << "Ingrese nombre a buscar:\n" << endl;
             string n;
+            cin.ignore(256,'\n');
+            cout << "Ingrese nombre a buscar: " << endl;
             getline(cin, n);
             auto clienteModificar = bd.buscarClientePorNombre(n);
             if (clienteModificar.id_cliente != 0) {

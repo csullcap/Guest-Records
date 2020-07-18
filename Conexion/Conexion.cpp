@@ -210,7 +210,7 @@ std::vector<Administrador> Conexion::getAdministradores() {
 }
 
 Administrador Conexion::buscarPorNombre(string s) {
-    std::string query = "select * from administrador a where a.nombre like '%" + s + "%'";
+    std::string query = "select * from administrador a where a.nombre like '" + s + "'";
     query_state = mysql_query(connection, query.c_str());
     auto admin = Administrador();
     if (!query_state) {
