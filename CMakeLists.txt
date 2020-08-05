@@ -21,6 +21,7 @@ set(P_S main.cpp
 #        ReciboHospedaje/ReciboHospedaje.cpp ReciboHospedaje/ReciboHospedaje.h
 #        AdquirirServicio/AdquirirServicio.cpp AdquirirServicio/AdquirirServicio.h
 #        Habitacion/Habitacion.cpp Habitacion/Habitacion.h
+        Constantes/Constantes.h
         Funciones/funciones.cpp Conexion/Conexion2.cpp Conexion/Conexion.cpp Conexion/Conexion.h ReciboHospedaje_Cliente/ReciboHospedaje_Cliente.h)
 add_executable(PS ${P_S})
 target_link_libraries(PS mysqlcppconn.lib)

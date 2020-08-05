@@ -13,9 +13,9 @@ class Conexion {
 
     private:
         char * ip = (char*)"sql10.freemysqlhosting.net";
-        char * usr = (char*)"sql10352889";
-        char * pass = (char*)"ug7jc4mGXp";
-        char * db = (char*)"sql10352889";
+        char * usr = (char*)"sql10357819";
+        char * pass = (char*)"PJuPLd4d6d";
+        char * db = (char*)"sql10357819";
 
     public:
         Conexion();

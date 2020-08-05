@@ -17,13 +17,14 @@ namespace std {
 
 int main() {
     system("color 81");
-    setlocale(LC_ALL,"Spanish");
+    setlocale(LC_ALL,"spanish");
     Conexion bd_conexion;
     Hotel hotel=bd_conexion.getDatosHotel(1);
     Administrador administrador;
     char op_main;
     do {
-        //system("mode con: cols=80 lines=25");
+//        int x = dimensiones::ancho;
+        system(("mode con: cols=" +to_string(dimensiones::ancho)+" lines="+to_string(dimensiones::alto)).c_str());
         imprimir_rectangle('=');
         gotoxy(8,8);
         cout <<"Hotel : "<<tab<<hotel.nombre<<tab<< endl;
@@ -45,6 +46,7 @@ int main() {
             case '1':
                 system("cls");
                 if(iniciarSesion(administrador,bd_conexion)){
+                    gotoxy(4,8);
                     cout<<"Bienvenido al sistema "+administrador.nombre<<" "<<administrador.apellidos<<endl;
                     menu_principal(administrador,bd_conexion);
                 }
