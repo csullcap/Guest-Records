@@ -26,26 +26,26 @@ int main() {
 //        int x = dimensiones::ancho;
         system(("mode con: cols=" +to_string(dimensiones::ancho)+" lines="+to_string(dimensiones::alto)).c_str());
         imprimir_rectangle('=');
-        gotoxy(8,8);
+        goto2xy(8,8);
         cout <<"Hotel : "<<tab<<hotel.nombre<<tab<< endl;
-        gotoxy(8,9);
+        goto2xy(8,9);
         cout <<"Direccion: "<<tab<<hotel.direccion<<tab<<endl;
-        gotoxy(8,10);
+        goto2xy(8,10);
         cout <<"Telefono :"<<tab<<hotel.telefono<<tab<<endl<<endl;
-        gotoxy(8,11);
+        goto2xy(8,11);
         cout <<"Seleccione la opcion"<<tab<<endl;
-        gotoxy(8,12);
+        goto2xy(8,12);
         cout <<"(1) Iniciar Sesion"<<tab<<endl;
-        gotoxy(8,13);
+        goto2xy(8,13);
         cout <<"(2) Cerrar"<<tab<<endl;
-        gotoxy(8,14);
+        goto2xy(8,14);
         cout <<"Opcion : ";
         cin>>op_main;
         switch (op_main) {
             case '1':
                 system("cls");
                 if(iniciarSesion(administrador,bd_conexion)){
-                    gotoxy(4,8);
+                    goto2xy(4,8);
                     cout<<"Bienvenido al sistema "+administrador.nombre<<" "<<administrador.apellidos<<endl;
                     menu_principal(administrador,bd_conexion);
                 }

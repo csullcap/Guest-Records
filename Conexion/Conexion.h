@@ -27,8 +27,8 @@ class Conexion {
         bool inicioSesion(Administrador &admin,string username,string contra);
         int getfilas(string tabla);
         void addReciboHospedaje(Administrador admin);
-        void registrosPendientes();
-        void estadoHabitacion();
+        MYSQL_RES * registrosPendientes();
+        MYSQL_RES * estadoHabitacion();
         std::vector<Administrador> getAdministradores();
         void insertarNuevoAdministrador(Administrador administrador);
         Administrador buscarPorNombre(string s);
@@ -39,7 +39,7 @@ class Conexion {
         void actualizarCliente(Cliente cliente);
         void eliminarCliente(int i);
         std::vector<Cliente> getClientes();
-        void verTodosRegistros();
+        MYSQL_RES * verTodosRegistros();
         void consultaHabitaciones();
         void consultaNombreClientes();
         void agregarReservacion(string idReservacion, string idHabitacion, string idCliente, string fecha);
@@ -47,13 +47,13 @@ class Conexion {
         void buscarReservacion(string id);
         void modificarReservacion(string idReservacion, string idHabitacion, string idCliente, string fecha);
         void eliminarReservacion(string idReservacion);
-        void consultaServicios();
+        MYSQL_RES * consultaServicios();
         void buscarServicios(string id);
-        void agregarServicio(string idServicio, string nombre, string precio);
+        int agregarServicio(string idServicio, string nombre, string precio);
         void modificarServicio(string idServicio, string nombre, string precio);
         void eliminarServicio(string idReservacion);
-        void terminar_registro(int id);
-        void agregaradquirirservicio(int id);
+        int terminar_registro(int id);
+        int agregaradquirirservicio(int id, int idServicio, int cantidad);
         int gettipoHabitacion(int id);
         double getcostoTipoHabitacion(int id);
         double getcostototal(int id);
