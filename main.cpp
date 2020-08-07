@@ -42,7 +42,6 @@ int main() {
         cout <<"Opcion : ";
         cin>>op_main;
         switch (op_main) {
-
             case '1':
                 system("cls");
                 if(iniciarSesion(administrador,bd_conexion)){

@@ -12,6 +12,7 @@ struct ReciboHospedaje {
     int id_habitacion;
     int id_reservacion;
     int id_administrador;
+    int dias;
     int costo=0;
     int estado; //0 activo 1 terminado 2 cancelado
     string fecha_inicio;

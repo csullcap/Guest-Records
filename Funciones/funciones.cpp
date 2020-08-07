@@ -1,39 +1,32 @@
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
-
-#define ENTER 13
-#define BACKSPACE 8
-
 #include "../Administrador/Administrador.h"
 #include "../Conexion/Conexion.h"
 #include "../Constantes/Constantes.h"
-#include "../Habitacion/Habitacion.h"
-#include "../ReciboHospedaje/ReciboHospedaje.h"
 
+#define ENTER 13
+#define BACKSPACE 8
 using namespace std;
 static int Y_DEFAULT = 9;
 static int X_DEFAULT = 12;
 static int Y_Current = 8;
 
-
 bool iniciarSesion(Administrador &admin, Conexion bd_conexion);
-
 void menu_principal(Administrador &admin, Conexion bd_conexion);
-
 void servicioDeHotel(Administrador &admin, Conexion bd_conexion);
-
 void gotoxy(int x, int y);
-
 void imprimir_rectangle(char a);
-
 void mostrarMenuAdministrador(Administrador &administrador, Conexion bd);
-
 void mostrarMenuClientes(Administrador &administrador, Conexion bd);
+void menuReservacion(Administrador &administrador, Conexion conexion);
+void menuServicio(Administrador &administrador, Conexion conexion);
+string tabularr(int n);
+void tabularc(int n);
 
 inline void centrar(bool reiniciarY = false, unsigned int count = 0, ...) {
     va_list ap;
-            va_start(ap, count);
+    va_start(ap, count);
     if (reiniciarY) {
         Y_Current = Y_DEFAULT;
     }
@@ -42,27 +35,24 @@ inline void centrar(bool reiniciarY = false, unsigned int count = 0, ...) {
     for (int j = 0; j < count; j++) {
         std::cout << va_arg(ap, char*);
     }
-            va_end(ap);
+    va_end(ap);
 }
 
 inline bool iniciarSesion(Administrador &admin, Conexion bd_conexion) {
     string user;
     string password;
-    char op_iniciar_sesion = 0;
+    char op_iniciar_sesion = '0';
     bool autentificacion = false;
     do {
         imprimir_rectangle('=');
-        centrar(false, 2, "Ingrese usuario", "\n");
-//        centrar(2, false,"Ingrese usuario" , "\n");
-        centrar(false, 1, "");
+        tabularc(4);
+        cout<<tabularr(2)<<"Ingrese usuario"<<endl;
         cin.ignore(256, '\n');
-//        gotoxy(8,9);
+        cout<<tabularr(2);
         getline(cin, user);
-//        gotoxy(8,10);
-        centrar(false, 2, "Ingrese Contraseña", "\n");
+        cout<<tabularr(2)<<"Ingrese contraseña"<<endl;
+        cout<<tabularr(2);
         char caracter;
-//        gotoxy(8,11);
-        centrar(false, 1, "");
         caracter = _getch();
         password = "";
         while (caracter != ENTER) {
@@ -77,12 +67,9 @@ inline bool iniciarSesion(Administrador &admin, Conexion bd_conexion) {
             }
             caracter = _getch();
         }
-        //getline(cin, password);
         if (bd_conexion.inicioSesion(admin, user, password)) {
-//            gotoxy(8,13);
-//            centrar(); , "\n" , "\n" , "Cuenta valida" , "\n";
-//            gotoxy(8,13);
-            centrar(false, 1, "Espere un momento ");
+            cout<<endl;
+            cout<<tabularr(2)<<"Espere un momento";
             Sleep(1000);
             cout << ".";
             Sleep(1000);
@@ -91,13 +78,9 @@ inline bool iniciarSesion(Administrador &admin, Conexion bd_conexion) {
             cout << ".";
             autentificacion = true;
         } else {
-//            gotoxy(8,12);
             centrar(false, 4, "\n", "\n", "Usuario o contraseña invalidos", "\n");
-//            gotoxy(8,13);
             centrar(false, 2, "Desea intertar nuevamente (1)Si (2)No", "\n");
-//            gotoxy(8,14);
             centrar(false, 1, "Opcion: ");
-//            gotoxy(8,15);
             cin >> op_iniciar_sesion;
         }
         system("cls");
@@ -127,24 +110,24 @@ inline void menu_principal(Administrador &admin, Conexion bd_conexion) {
         centrar(false, 1, "");
         cin >> op_menu_principal;
         switch (op_menu_principal) {
-
             case '1':
                 system("cls");
                 imprimir_rectangle('=');
                 centrar(true, 2, "SERVICIO DE RESERVACIONES", "\n");
-                system("pause");
+                menuReservacion(admin, bd_conexion);
                 break;
 
             case '2':
                 system("cls");
                 imprimir_rectangle('=');
-                centrar(true, 2, "SERVICIO DE HOTEL", "\n");
+                centrar(true, 2, "SERVICIOS DE HOTEL", "\n");
                 servicioDeHotel(admin, bd_conexion);
                 break;
 
             case '3':
                 system("cls");
                 imprimir_rectangle('=');
+                centrar(true, 2, "ADMINISTRADOR", "\n");
                 mostrarMenuAdministrador(admin, bd_conexion);
                 break;
 
@@ -159,7 +142,7 @@ inline void menu_principal(Administrador &admin, Conexion bd_conexion) {
                 system("cls");
                 imprimir_rectangle('=');
                 centrar(true, 2, "SERVICIOS", "\n");
-                system("pause");
+                menuServicio(admin, bd_conexion);
                 break;
 
             case '6':
@@ -200,10 +183,37 @@ inline void servicioDeHotel(Administrador &admin, Conexion bd_conexion) {
 
             case '2':
                 system("cls");
+                char op_reg_pend;
+                int id;
                 imprimir_rectangle('=');
                 centrar(false, 2, "Registro Pendientes", "\n");
                 bd_conexion.registrosPendientes();
-                system("pause");
+                cout<<endl<<"Que desea realizar?"<<endl;
+                cout<<"(1)Terminar reservacion"<<endl;
+                cout<<"(2)Agregar servicio a la reservacion"<<endl;
+                cin>>op_reg_pend;
+                switch (op_reg_pend) {
+                    case '1':
+                        cout<<"Ingrese el id:"<<endl;
+                        cin>>id;
+                        bd_conexion.terminar_registro(id);
+                        break;
+                    case '2':
+                        char rpta;
+                        cout<<"Ingrese el id:"<<endl;
+                        cin>>id;
+                        do{
+                            bd_conexion.agregaradquirirservicio(id);
+                            cout<<"Desea agregar otro servicio: (1)SI (2)NO"<<endl;
+                            cin>>rpta;
+                        }
+                        while(rpta!='2');
+                        break;
+                    default:
+                        cin.ignore(256, '\n');
+                        centrar(false, 2, "Opcion Invalida");
+                        break;
+                }
                 break;
 
             case '3':
@@ -267,12 +277,11 @@ inline void imprimir_rectangle(char a) {
         gotoxy(dimensiones::ancho-1, y);
         putchar('|');
     }
+    gotoxy(0,0);
 }
 
 inline void mostrarMenuAdministrador(Administrador &administrador, Conexion bd) {
-
     int opcion;
-
     do {
         system("cls");
         imprimir_rectangle('=');
@@ -380,7 +389,6 @@ inline void mostrarMenuAdministrador(Administrador &administrador, Conexion bd) 
 
 inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
     int opcion;
-
     do {
         centrar(true, 2, "Menu Principal Clientes", "\n");
         centrar(false, 2, "(1) Agregar", "\n");
@@ -466,4 +474,167 @@ inline void mostrarMenuClientes(Administrador &administrador, Conexion bd) {
             system("pause");
         }
     } while (opcion != 5);
+}
+
+inline void menuReservacion(Administrador &admin, Conexion bd_conexion) {
+    setlocale(LC_ALL,"Spanish");
+    int cant = 0, op = 0;
+    string aux,aux1,aux2,aux3;
+    while(op != 4) {
+        cout << "--Administracion de reservaciones--" << endl;
+        cout << "  Seleccione una opcion:" << endl;
+        cout << "  (1)Añadir reservacion" << endl;
+        cout << "  (2)Ver reservaciones" << endl;
+        cout << "  (3)Buscar reservaciones" << endl;
+        cout << "  (4)Volver" << endl;
+        cin >> op;
+        switch(op) {
+            case 1:
+                system("cls");
+                cout << "-Añadir reservacion-" << endl;
+                cout << "  Ingrese ID de la reservacion: ";
+                cin >> aux;
+                cout << "  Lista de habitaciones" << endl;
+                bd_conexion.consultaHabitaciones();
+                cout << "  Ingrese el numero de la habitacion: ";
+                cin >> aux1;
+                cout << "  Lista de clientes" << endl;
+                bd_conexion.consultaNombreClientes();
+                cout << "  Ingrese ID del cliente: ";
+                cin >> aux2;
+                cout << "  Ingrese fecha (AAAA-MM-DD HH:MM:SS): ";
+                cin.ignore();
+                getline (cin,aux3);
+                bd_conexion.agregarReservacion(aux,aux1,aux2,aux3);
+                break;
+            case 2:
+                system("cls");
+                //verReservaciones(reservaciones, cant);
+                bd_conexion.consultaReservaciones();
+                break;
+            case 3:
+                system("cls");
+                cout << "-Buscar reservacion-" << endl;
+                cout << "  Ingrese ID de la reservacion:";
+                cin >> aux;
+                //buscarReservacion(reservaciones, cant);
+                bd_conexion.buscarReservacion(aux);
+                cout << " ¿Que desea hacer?, seleccione una opcion:" << endl;
+                cout << " (1)Modificar reservacion" << endl;
+                cout << " (2)Cancelar reservacion" << endl;
+                cout << " (3)Volver" << endl;
+                cin >> op;
+                if(op == 1){
+                    cout << "  Ingrese los nuevos datos" << endl;
+                    cout << "   Lista de habitaciones" << endl;
+                    bd_conexion.consultaHabitaciones();
+                    cout << "   Ingrese el numero de la habitacion: ";
+                    cin >> aux1;
+                    cout << "   Lista de clientes" << endl;
+                    bd_conexion.consultaNombreClientes();
+                    cout << "   Ingrese ID del cliente: ";
+                    cin >> aux2;
+                    cout << "   Ingrese fecha (AAAA-MM-DD HH:MM:SS): ";
+                    cin.ignore();
+                    getline (cin,aux3);
+                    bd_conexion.modificarReservacion(aux,aux1,aux2,aux3);
+                }else if(op == 2){
+                    bd_conexion.eliminarReservacion(aux);
+                }else if(op == 3){
+                    break;
+                }else{
+                    cout << "Opcion incorrecta" << endl;
+                }
+                break;
+            case 4:
+                system("cls");
+                break;
+
+            default:
+                cout << "Opcion incorrecta: Ingrese una valida o 4 para volver" << endl;
+                break;
+        }
+        system("cls");
+    }
+    system("cls");
+}
+
+inline void menuServicio(Administrador &admin, Conexion bd_conexion) {
+    setlocale(LC_ALL,"Spanish");
+    int cant = 0, op = 0;
+    string aux,aux1,aux2;
+    while(op != 4) {
+        cout << "--Administracion de servicios--" << endl;
+        cout << "  Seleccione una opcion:" << endl;
+        cout << "  (1)Añadir servicio" << endl;
+        cout << "  (2)Ver servicio" << endl;
+        cout << "  (3)Buscar servicios" << endl;
+        cout << "  (4)Volver" << endl;
+        cin >> op;
+        switch(op) {
+            case 1:
+                system("cls");
+                cout << "-Añadir servicio" << endl;
+                cout << "  Ingrese ID del servicio: ";
+                cin >> aux;
+                cout << "  Ingrese el nombre del servicio: ";
+                cin >> aux1;
+                cout << "  Ingrese el precio: ";
+                cin >> aux2;
+                bd_conexion.agregarServicio(aux,aux1,aux2);
+                break;
+            case 2:
+                system("cls");
+                //verReservaciones(reservaciones, cant);
+                bd_conexion.consultaServicios();
+                break;
+            case 3:
+                system("cls");
+                cout << "-Buscar servicio-" << endl;
+                cout << "  Ingrese ID del servicio: ";
+                cin >> aux;
+                bd_conexion.buscarServicios(aux);
+                cout << " ¿Que desea hacer?, seleccione una opcion:" << endl;
+                cout << " (1)Modificar servicio" << endl;
+                cout << " (2)Eliminar servicio" << endl;
+                cout << " (3)Volver" << endl;
+                cin >> op;
+                if(op == 1){
+                    cout << "  Ingrese los nuevos datos" << endl;
+                    cout << "   Ingrese el nombre del servicio: ";
+                    cin >> aux1;
+                    cout << "   Ingrese el precio: ";
+                    cin >> aux2;
+                    bd_conexion.modificarServicio(aux,aux1,aux2);
+                }else if(op == 2){
+                    bd_conexion.eliminarServicio(aux);
+                }else if(op == 3){
+                    break;
+                }else{
+                    cout << "Opcion incorrecta" << endl;
+                }
+                break;
+            case 4:
+                system("cls");
+                break;
+            default:
+                cout << "Opcion incorrecta: Ingrese una valida o 4 para volver" << endl;
+                break;
+        }system("cls");
+    }
+    system("cls");
+}
+
+inline string tabularr(int n){
+    string g="";
+    for(int i=0;i<n;i++){
+        g=g+"\t";
+    }
+    return g;
+}
+
+inline void tabularc(int n){
+    for(int i=0;i<n;i++){
+        cout<<endl;
+    }
 }
